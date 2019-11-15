@@ -1,2 +1,3 @@
 # top-trumps
-
+## Or, "Have you read K&R properly?"
+Just testing that I can actually write some C...

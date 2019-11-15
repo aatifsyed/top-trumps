@@ -38,7 +38,7 @@ void print_cards(Card* pointer_to_block_of_cards, int number_of_cards_to_print) 
 {
   for(int current_card = 0; current_card < number_of_cards_to_print; current_card++)
   {
-    printf("Card %3d: Charm %4d, Strangeness %4d, Cheerfullness %4d, Sadness %4d\n",current_card, (*(pointer_to_block_of_cards + current_card)).charm, (*(pointer_to_block_of_cards + current_card)).strangeness, (*(pointer_to_block_of_cards + current_card)).cheerfullness, (*(pointer_to_block_of_cards + current_card)).sadness); // this line is very long = would a perimeta engineer split off into multiple variables, or multiple calls? I could have a printf() for each property...
+    printf("Card %3d at %p, pointing to %p: Charm %4d, Strangeness %4d, Cheerfullness %4d, Sadness %4d\n",current_card, (pointer_to_block_of_cards + current_card), (*(pointer_to_block_of_cards + current_card)).next_card, (*(pointer_to_block_of_cards + current_card)).charm, (*(pointer_to_block_of_cards + current_card)).strangeness, (*(pointer_to_block_of_cards + current_card)).cheerfullness, (*(pointer_to_block_of_cards + current_card)).sadness); // this line is very long = would a perimeta engineer split off into multiple variables, or multiple calls? I could have a printf() for each property...
   }
 }
 
@@ -73,6 +73,25 @@ void print_players(Player* pointer_to_list_of_players, int number_of_players)
     printf("Top card at %p, ",(*(pointer_to_list_of_players + current_player)).top_card);
     printf("bottom card at %p\n",(*(pointer_to_list_of_players + current_player)).bottom_card);
   }
+}
+
+int allocate_cards(Card* pointer_to_block_of_cards, int number_of_cards_each, Player* pointer_to_list_of_players, int number_of_players)
+{
+  
+  Card* pointer_to_current_card = pointer_to_block_of_cards; // is this bad form? see earlier line
+
+  
+  
+  // Should I copy the pointers to local pointers here. Lets us increment them with impunity...
+  // for (int current_player = 0; current_player < number_of_players; current_player++)
+  // {
+  //   for (int current_card = 0; current_card < number_of_cards_each; current_card++) // setting top card in the for initial step
+  //   {
+  //     ;
+  //   }
+  // }
+  
+  return 0;
 }
 
 int main(void)

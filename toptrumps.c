@@ -4,15 +4,16 @@
 #define CHARM 0 // these are the names of the properties of the card
 #define STRANGENESS 1
 #define CHEERFULLNESS 2
-#define SADNESS 3
+#define SADNESS 3 // [TODO] allow arbitrary number of properties
 
 // global variables and useful structures
 const int number_of_cards_each = 10;
 const int number_of_players = 2;
 
-typedef struct card // I wanted to put this in the make_cards function...
+// making and printing cards
+typedef struct card 
 {
-  char properties[4];
+  int properties[4];
   struct card *next_card; // using simply "Card" will confuse the compiler
 } Card;
 
@@ -26,10 +27,10 @@ Card *make_cards(int number_of_cards_to_make) // returns a pointer to the first 
   srand(time(NULL)); // seeding RNG with current time
   for(int current_card = 0; current_card < number_of_cards_to_make; current_card++)
   {
-    (*(pointer_to_block_of_cards + current_card)).properties[CHARM] = rand() % 255; // Pointer arithmetic here was hard earned! rand docs mention RAND_MAX - should I be messing with this?
-    (*(pointer_to_block_of_cards + current_card)).properties[STRANGENESS] = rand() % 255; // [TODO] make it positive. Surely there's data being lost if I'm going from signed to char...?
-    (*(pointer_to_block_of_cards + current_card)).properties[CHEERFULLNESS] = rand() % 255;
-    (*(pointer_to_block_of_cards + current_card)).properties[SADNESS] = rand() % 255;
+    (*(pointer_to_block_of_cards + current_card)).properties[CHARM] = rand() % 9999; // Pointer arithmetic here was hard earned! rand docs mention RAND_MAX - should I be messing with this?
+    (*(pointer_to_block_of_cards + current_card)).properties[STRANGENESS] = rand() % 9999; // [TODO] make it positive. Surely there's data being lost if I'm going from signed to char...?
+    (*(pointer_to_block_of_cards + current_card)).properties[CHEERFULLNESS] = rand() % 9999;
+    (*(pointer_to_block_of_cards + current_card)).properties[SADNESS] = rand() % 9999;
     (*(pointer_to_block_of_cards + current_card)).next_card = pointer_to_block_of_cards + current_card + 1; // simplifies allocate_cards() greatly
   }
 
@@ -40,10 +41,18 @@ void print_cards(Card* pointer_to_block_of_cards, int number_of_cards_to_print) 
 {
   for(int current_card = 0; current_card < number_of_cards_to_print; current_card++)
   {
-    printf("Card %3d at %9p, pointing to %9p: Charm %4d, Strangeness %4d, Cheerfullness %4d, Sadness %4d\n",current_card, (pointer_to_block_of_cards + current_card), (*(pointer_to_block_of_cards + current_card)).next_card, (*(pointer_to_block_of_cards + current_card)).properties[CHARM], (*(pointer_to_block_of_cards + current_card)).properties[STRANGENESS], (*(pointer_to_block_of_cards + current_card)).properties[CHEERFULLNESS], (*(pointer_to_block_of_cards + current_card)).properties[SADNESS]); // this line is very long = would a perimeta engineer split off into multiple variables, or multiple calls? I could have a printf() for each property...
+    printf("Card %3d at %9p, pointing to %9p: Charm %4d, Strangeness %4d, Cheerfullness %4d, Sadness %4d\n",
+    current_card, 
+    (pointer_to_block_of_cards + current_card), 
+    (*(pointer_to_block_of_cards + current_card)).next_card, 
+    (*(pointer_to_block_of_cards + current_card)).properties[CHARM], 
+    (*(pointer_to_block_of_cards + current_card)).properties[STRANGENESS], 
+    (*(pointer_to_block_of_cards + current_card)).properties[CHEERFULLNESS], 
+    (*(pointer_to_block_of_cards + current_card)).properties[SADNESS]);
   }
 }
 
+// making and printing players
 typedef struct player
 {
   Card* top_card;
@@ -77,6 +86,7 @@ void print_players(Player* pointer_to_list_of_players, int number_of_players)
   }
 }
 
+// gameplay
 int allocate_cards(Card* pointer_to_block_of_cards, int number_of_cards_each, Player* pointer_to_list_of_players, int number_of_players)
 {
   for (int current_player = 0; current_player < number_of_players; current_player++)
@@ -97,6 +107,33 @@ int allocate_cards(Card* pointer_to_block_of_cards, int number_of_cards_each, Pl
   return 0;
 }
 
+int best_card_property_index(int player_number, Player* pointer_to_list_of_players) // returns the index of the card.property
+{ // my instinct is to make this const Player*. [TODO] make relevant variables consts
+  int best_property_index = -1;
+  int best_property_value = 0; 
+
+  Player* pointer_to_current_player = pointer_to_list_of_players + player_number;
+  Player current_player = *pointer_to_current_player;
+  Card* pointer_to_current_card = current_player.top_card;
+  Card current_card = *pointer_to_current_card; // as opposed to having it all on one line...
+  
+  printf("Card at address %p has properties %d, %d, %d, %d\n",
+    pointer_to_current_card, current_card.properties[0], current_card.properties[1], current_card.properties[2], current_card.properties[3]);
+
+  for (int current_property_index = 0; current_property_index < 4; current_property_index++)
+  {
+    printf("Inspecting index %d, the best value is %d, and the card property is %d\n", current_property_index, best_property_value, current_card.properties[current_property_index]);
+    if ( current_card.properties[current_property_index] > best_property_value )
+    {
+      printf("found greater value\n");
+      best_property_value = current_card.properties[current_property_index];
+      best_property_index = current_property_index;
+    }
+  }
+  
+  return best_property_index;
+}
+
 int main(void)
 {
   Card* pointer_to_block_of_cards; // I know I could do this all in one line, I just want to be very explicit for now
@@ -112,7 +149,11 @@ int main(void)
   print_cards(pointer_to_block_of_cards, number_of_cards_each * number_of_players);
   print_players(pointer_to_list_of_players, number_of_players);
 
-
+  printf("Player 0's best card property is index %d\n",
+     best_card_property_index(0,pointer_to_list_of_players));
+  printf("Player 1's best card property is index %d\n",
+     best_card_property_index(1,pointer_to_list_of_players));
+  
   // play_a_round();
 
   return 0;

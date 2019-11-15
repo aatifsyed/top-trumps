@@ -29,6 +29,7 @@ Card *make_cards(int number_of_cards_to_make) // returns a pointer to the first 
     (*(pointer_to_block_of_cards + current_card)).strangeness = rand() % 255; // [TODO] make it positive. Surely there's data being lost if I'm going from signed to char...?
     (*(pointer_to_block_of_cards + current_card)).cheerfullness = rand() % 255;
     (*(pointer_to_block_of_cards + current_card)).sadness = rand() % 255;
+    (*(pointer_to_block_of_cards + current_card)).next_card = pointer_to_block_of_cards + current_card + 1; // simplifies allocate_cards() greatly
   }
 
   return pointer_to_block_of_cards; // Messing with multidimensional arrays taught me that pointer_to_block_of_cards != Card. Should I be doing this differently?
@@ -38,7 +39,7 @@ void print_cards(Card* pointer_to_block_of_cards, int number_of_cards_to_print) 
 {
   for(int current_card = 0; current_card < number_of_cards_to_print; current_card++)
   {
-    printf("Card %3d at %p, pointing to %p: Charm %4d, Strangeness %4d, Cheerfullness %4d, Sadness %4d\n",current_card, (pointer_to_block_of_cards + current_card), (*(pointer_to_block_of_cards + current_card)).next_card, (*(pointer_to_block_of_cards + current_card)).charm, (*(pointer_to_block_of_cards + current_card)).strangeness, (*(pointer_to_block_of_cards + current_card)).cheerfullness, (*(pointer_to_block_of_cards + current_card)).sadness); // this line is very long = would a perimeta engineer split off into multiple variables, or multiple calls? I could have a printf() for each property...
+    printf("Card %3d at %9p, pointing to %9p: Charm %4d, Strangeness %4d, Cheerfullness %4d, Sadness %4d\n",current_card, (pointer_to_block_of_cards + current_card), (*(pointer_to_block_of_cards + current_card)).next_card, (*(pointer_to_block_of_cards + current_card)).charm, (*(pointer_to_block_of_cards + current_card)).strangeness, (*(pointer_to_block_of_cards + current_card)).cheerfullness, (*(pointer_to_block_of_cards + current_card)).sadness); // this line is very long = would a perimeta engineer split off into multiple variables, or multiple calls? I could have a printf() for each property...
   }
 }
 
@@ -77,11 +78,12 @@ void print_players(Player* pointer_to_list_of_players, int number_of_players)
 
 int allocate_cards(Card* pointer_to_block_of_cards, int number_of_cards_each, Player* pointer_to_list_of_players, int number_of_players)
 {
-  
-  Card* pointer_to_current_card = pointer_to_block_of_cards; // is this bad form? see earlier line
-
-  
-  
+  for (int current_player = 0; current_player < number_of_players; current_player++)
+  {
+    (*(pointer_to_list_of_players + current_player)).top_card = pointer_to_block_of_cards + current_player*number_of_cards_each; // set top card
+    (*(pointer_to_list_of_players + current_player)).bottom_card = pointer_to_block_of_cards + (((current_player + 1)*number_of_cards_each)-1); // set bottom card
+    (*(pointer_to_block_of_cards + (((current_player + 1)*number_of_cards_each)-1))).next_card = NULL; // point bottom card to NULL  
+  }
   // Should I copy the pointers to local pointers here. Lets us increment them with impunity...
   // for (int current_player = 0; current_player < number_of_players; current_player++)
   // {
@@ -100,14 +102,15 @@ int main(void)
   Player* pointer_to_list_of_players;
 
   pointer_to_block_of_cards = make_cards(number_of_cards_each * number_of_players);
-
   print_cards(pointer_to_block_of_cards, number_of_cards_each * number_of_players);
 
   pointer_to_list_of_players = make_players(number_of_players);
-
   print_players(pointer_to_list_of_players, number_of_players);
 
-  // allocate_cards();
+  allocate_cards(pointer_to_block_of_cards, number_of_cards_each, pointer_to_list_of_players, number_of_players);
+  print_cards(pointer_to_block_of_cards, number_of_cards_each * number_of_players);
+  print_players(pointer_to_list_of_players, number_of_players);
+
 
   // play_a_round();
 

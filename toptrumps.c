@@ -27,6 +27,7 @@ Card *make_cards(int number_of_cards_to_make) // returns a pointer to the first 
   srand(time(NULL)); // seeding RNG with current time
   for(int current_card = 0; current_card < number_of_cards_to_make; current_card++)
   {
+
     (*(pointer_to_block_of_cards + current_card)).properties[CHARM] = rand() % 9999; // Pointer arithmetic here was hard earned! rand docs mention RAND_MAX - should I be messing with this?
     (*(pointer_to_block_of_cards + current_card)).properties[STRANGENESS] = rand() % 9999; // [TODO] make it positive. Surely there's data being lost if I'm going from signed to char...?
     (*(pointer_to_block_of_cards + current_card)).properties[CHEERFULLNESS] = rand() % 9999;
@@ -41,7 +42,7 @@ void print_cards(Card* pointer_to_block_of_cards, int number_of_cards_to_print) 
 {
   for(int current_card = 0; current_card < number_of_cards_to_print; current_card++)
   {
-    printf("Card %3d at %9p, pointing to %9p: Charm %4d, Strangeness %4d, Cheerfullness %4d, Sadness %4d\n",
+    printf("Card %3d at %9p, pointing to %9p: %4d, %4d, %4d, %4d\n",
     current_card, 
     (pointer_to_block_of_cards + current_card), 
     (*(pointer_to_block_of_cards + current_card)).next_card, 
@@ -117,21 +118,62 @@ int best_card_property_index(int player_number, Player* pointer_to_list_of_playe
   Card* pointer_to_current_card = current_player.top_card;
   Card current_card = *pointer_to_current_card; // as opposed to having it all on one line...
   
-  printf("Card at address %p has properties %d, %d, %d, %d\n",
-    pointer_to_current_card, current_card.properties[0], current_card.properties[1], current_card.properties[2], current_card.properties[3]);
-
   for (int current_property_index = 0; current_property_index < 4; current_property_index++)
   {
-    printf("Inspecting index %d, the best value is %d, and the card property is %d\n", current_property_index, best_property_value, current_card.properties[current_property_index]);
     if ( current_card.properties[current_property_index] > best_property_value )
     {
-      printf("found greater value\n");
       best_property_value = current_card.properties[current_property_index];
       best_property_index = current_property_index;
     }
   }
   
   return best_property_index;
+}
+
+int play_a_round(int current_player, Player* pointer_to_list_of_players) // returns the winning player's index, or -1 if the other player has no more cards left 
+{
+  int current_player_best_property_index;
+  current_player_best_property_index = best_card_property_index(current_player, pointer_to_list_of_players);
+
+  
+
+  ;
+}
+
+int other_player(int current_player) // returns index of not current player
+{
+  switch (current_player)
+  {
+  case 0:
+    return 1;
+    break;
+  case 1:
+    return 0;
+    break;
+  default:
+    return -1; //error
+    break;
+  }
+}
+
+int move_cards(int winning_player_index, int losing_player_index, Player* pointer_to_list_of_players)
+{
+  Card* pointer_to_winning_player_top_card;
+  Card* pointer_to_winning_player_bottom_card;
+
+}
+
+int get_top_card_property(int card_property_index, int player_index, Player* pointer_to_list_of_players)
+{
+  Card* pointer_to_top_card = (*(pointer_to_list_of_players + player_index)).top_card;
+  int top_card_property = (*(pointer_to_top_card)).properties[card_property_index];
+  return top_card_property;
+}
+
+int change_card_pointers(Card* pointer_to_source_card, Card* pointer_to_destination_card) // changes card.next_card
+{
+  (*(pointer_to_source_card)).next_card = pointer_to_destination_card;
+  return 0;
 }
 
 int main(void)
@@ -149,11 +191,15 @@ int main(void)
   print_cards(pointer_to_block_of_cards, number_of_cards_each * number_of_players);
   print_players(pointer_to_list_of_players, number_of_players);
 
-  printf("Player 0's best card property is index %d\n",
-     best_card_property_index(0,pointer_to_list_of_players));
-  printf("Player 1's best card property is index %d\n",
-     best_card_property_index(1,pointer_to_list_of_players));
+  printf("Player 0's best card property is index %d\n",best_card_property_index(0,pointer_to_list_of_players));
+  printf("Player 0's top card property is %d\n", get_top_card_property(best_card_property_index(0,pointer_to_list_of_players), 0, pointer_to_list_of_players));
+  printf("Player 1's best card property is index %d\n",best_card_property_index(1,pointer_to_list_of_players));
+  printf("Player 1's top card property is %d\n", get_top_card_property(best_card_property_index(1,pointer_to_list_of_players), 1, pointer_to_list_of_players));
   
+  int current_player = rand() % number_of_players; // flip a coin to see who starts
+  printf("Player %d will start\n",current_player);
+
+
   // play_a_round();
 
   return 0;

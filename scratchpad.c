@@ -4,7 +4,7 @@
 
 int main()
 {
-    // srand(time(NULL));
+    srand(time(NULL));
 
     // for (int i = 0; i < 10; i++)
     // {
@@ -12,13 +12,15 @@ int main()
     // }  
     // return 0;
 
-    int empty;
-    printf("%d\n", empty);
+    // int empty;
+    // printf("%d\n", empty);
 
-    char a = '\0', b=-1;
+    // char a = '\0', b=-1;
 
-    if (b > a)
-    {
-        printf("your life is slightly easier");
-    }
+    // if (b > a)
+    // {
+    //     printf("your life is slightly easier");
+    // }
+
+    printf("%d\n",rand() % 2);
 }

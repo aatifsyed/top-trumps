@@ -158,9 +158,35 @@ int other_player(int current_player) // returns index of not current player
 
 int move_cards(int winning_player_index, int losing_player_index, Player* pointer_to_list_of_players)
 {
-  Card* pointer_to_winning_player_top_card;
-  Card* pointer_to_winning_player_bottom_card;
 
+  Player* winning_player = pointer_to_list_of_players + winning_player_index; // for consistency, I should have named this pointer_to_winning_player...
+  Player* losing_player = pointer_to_list_of_players + losing_player_index;
+
+  // point bottom card to top card
+  (*(*winning_player).bottom_card).next_card = (*winning_player).top_card; 
+  // winning player's top card points to next card
+  (*winning_player).top_card = (*(*winning_player).top_card).next_card;
+  // winning player's former top card points to losing player's top card
+  (*(*(*winning_player).bottom_card).next_card).next_card = (*losing_player).top_card;
+  // losing player's top card points to next card
+  (*losing_player).top_card = (*(*losing_player).top_card).next_card;
+  // winning player's bottom card points to new bottom card
+  (*winning_player).bottom_card = (*(*(*winning_player).bottom_card).next_card).next_card;
+  // winning player's new bottom card points to null
+  (*(*winning_player).bottom_card).next_card = NULL;
+
+//   // this code is too hard to read...
+//   // winning player
+//   //  point bottom card to top card
+//   (*(pointer_to_list_of_players + winning_player_index)).bottom_card = (*(pointer_to_list_of_players + winning_player_index)).top_card;
+//   //  make winning_player.top_card point to the top card's .next_card
+//   (*(pointer_to_list_of_players + winning_player_index)).top_card = (*((*(pointer_to_list_of_players + winning_player_index)).top_card)).next_card;
+//   //  point top card to losing player's top card
+//   (*((*(pointer_to_list_of_players + winning_player_index)).top_card)).next_card = (*(pointer_to_list_of_players + losing_player_index)).top_card;
+//   //  point losing player's top card to null
+//   change_card_pointers((*((*(pointer_to_list_of_players + losing_player_index)).top_card)).next_card, NULL);
+//   // make winning_player.bottom_card point to losing player's top card
+//   (*(pointer_to_list_of_players + winning_player_index)).bottom_card = (*(pointer_to_list_of_players + losing_player_index)).top_card;
 }
 
 int get_top_card_property(int card_property_index, int player_index, Player* pointer_to_list_of_players)
@@ -170,7 +196,7 @@ int get_top_card_property(int card_property_index, int player_index, Player* poi
   return top_card_property;
 }
 
-int change_card_pointers(Card* pointer_to_source_card, Card* pointer_to_destination_card) // changes card.next_card
+int change_card_pointers(Card* pointer_to_source_card, Card* pointer_to_destination_card) // changes card.next_card. can point to NULL
 {
   (*(pointer_to_source_card)).next_card = pointer_to_destination_card;
   return 0;
@@ -198,6 +224,10 @@ int main(void)
   
   int current_player = rand() % number_of_players; // flip a coin to see who starts
   printf("Player %d will start\n",current_player);
+
+  change_card_pointers(pointer_to_block_of_cards,NULL);
+  print_cards(pointer_to_block_of_cards, number_of_cards_each*number_of_players);
+
 
 
   // play_a_round();

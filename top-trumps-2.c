@@ -181,6 +181,8 @@ Player* other_player(Player* player)
 
 int main(void)
 {
+  srand(time(NULL));
+  
   int number_of_cards_each;
   number_of_cards_each = 10; // number_of_cards_each = get_number_of_cards(maximum_number_of_cards);
 
@@ -193,7 +195,16 @@ int main(void)
   print_player_cards(player_1);
   print_player_cards(player_2);
 
+  Player* first_player = player_1;
+  Player* second_player = player_2;
 
+  while(number_of_cards(second_player) != 0)
+  {
+    first_player = play_round(first_player, second_player);
+    second_player = other_player(first_player);
+  }
+
+  printf("Player %d lost\n",player_number(second_player));
 
   return 0;
 }

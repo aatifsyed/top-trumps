@@ -125,6 +125,14 @@ void print_player_cards(Player* player)
   }
 }
 
+void exchange_cards(Player* winner, Player* loser)
+{
+  Card* winners_card = pop_card_from_top(winner);
+  Card* losers_card = pop_card_from_top(loser);
+  send_to_bottom(winner, winners_card);
+  send_to_bottom(winner, losers_card);
+}
+
 int main(void)
 {
   int number_of_cards_each;
@@ -138,6 +146,10 @@ int main(void)
   
   give_player_cards(player_1, number_of_cards_each);
   print_player_cards(player_1);
+
+  give_player_cards(player_2, number_of_cards_each);
+  print_player_cards(player_2);
+
   
   
   return 0;

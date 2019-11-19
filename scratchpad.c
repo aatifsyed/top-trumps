@@ -53,6 +53,8 @@ int main()
     randomise_card(card);
     print_card(card);
     printf("best property at index %d\n", best_property_index(card));
+    print_card(NULL);
+    
     
     
 

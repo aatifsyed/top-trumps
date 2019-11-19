@@ -97,6 +97,18 @@ int best_property_index(Player* player)
   return best_property_index;
 }
 
+void give_player_cards(Player* player, int number_to_give)
+{
+  while( number_of_cards(player) <= number_to_give)
+  {
+    send_to_top(player, make_card());
+  }
+}
+
+void print_player_cards(Player* player)
+{
+
+}
 int main(void)
 {
     int number_of_cards_each;

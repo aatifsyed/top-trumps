@@ -11,5 +11,7 @@ Card* bottom_card(Player* player);
 Card* pop_card_from_top(Player* player);
 int number_of_cards(Player* player);
 int best_property_index(Player* player);
+void give_player_cards(Player* player, int number_to_give);
+void print_player_cards(Player* player);
 
 #endif

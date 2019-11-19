@@ -24,7 +24,15 @@ void randomise_card(Card *card)
 
 void print_card(Card* card)
 {
-  printf("Card at %p: next_card %p, %d, %d, %d, %d\n", card, card->next_card, card->properties[0], card->properties[1], card->properties[2], card->properties[3]);
+  if(card == NULL)
+  {
+    printf("Null pointer passed to print_card");
+    return;
+  }
+  
+  printf("Card at %p: next_card %p, %4d, %4d, %4d, %d4\n", 
+  card, card->next_card, 
+  card->properties[0], card->properties[1], card->properties[2], card->properties[3]);
 }
 
 int best_property_index(Card* card)
@@ -54,7 +62,7 @@ int main()
     print_card(card);
     printf("best property at index %d\n", best_property_index(card));
     print_card(NULL);
-    
+
     
     
 

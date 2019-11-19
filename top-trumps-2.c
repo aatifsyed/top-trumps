@@ -20,6 +20,12 @@ void randomise_card(Card* card)
 
 void print_card(Card* card)
 {
+  if(card == NULL)
+  {
+    printf("Null pointer passed to print_card");
+    return;
+  }
+  
   printf("Card at %p: next_card %p, %4d, %4d, %4d, %d4\n", 
   card, card->next_card, 
   card->properties[0], card->properties[1], card->properties[2], card->properties[3]);

@@ -138,12 +138,33 @@ void exchange_cards(Player* winner, Player* loser)
 
 Player* play_round(Player* first_player, Player* second_player) // returns winning player
 {
+  int property_index = best_property_index(first_player);
+  Player* winning_player;
 
+  if(first_player->top_card->properties[property_index] > second_player->top_card->properties[property_index])
+  {
+    winning_player = first_player;
+  }
+  else
+  {
+    winning_player = second_player; // second player wins draws
+  }
+
+  exchange_cards(winning_player,other_player(winning_player));
+  (winning_player->wins)++;
+  return winning_player;  
 }
 
 Player* other_player(Player* player)
 {
-
+  if (player == player_1)
+  {
+    return player_2;
+  }
+  else
+  {
+    return player_1;
+  }
 }
 
 int main(void)

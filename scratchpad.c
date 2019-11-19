@@ -26,7 +26,7 @@ void print_card(Card* card)
 {
   if(card == NULL)
   {
-    printf("Null pointer passed to print_card");
+    printf("Null pointer passed to print_card\n");
     return;
   }
   

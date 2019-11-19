@@ -6,7 +6,9 @@
 
 Card* make_card(void)
 {
-  return (Card*) calloc(1, sizeof(Card));
+  Card* card = (Card*) calloc(1, sizeof(Card));
+  randomise_card(card);
+  return card;
 }
 
 void randomise_card(Card* card)
@@ -22,11 +24,11 @@ void print_card(Card* card)
 {
   if(card == NULL)
   {
-    printf("Null pointer passed to print_card");
+    printf("Null pointer passed to print_card\n");
     return;
   }
   
-  printf("Card at %p: next_card %p, %4d, %4d, %4d, %d4\n", 
+  printf("Card at %9p: next_card %9p, %4d, %4d, %4d, %4d\n", 
   card, card->next_card, 
   card->properties[0], card->properties[1], card->properties[2], card->properties[3]);
 }
@@ -105,7 +107,7 @@ int best_property_index(Player* player)
 
 void give_player_cards(Player* player, int number_to_give)
 {
-  while( number_of_cards(player) <= number_to_give)
+  while(number_of_cards(player) < number_to_give)
   {
     send_to_top(player, make_card());
   }
@@ -113,21 +115,30 @@ void give_player_cards(Player* player, int number_to_give)
 
 void print_player_cards(Player* player)
 {
+  Card* current_card = player->top_card;
 
+  printf("Printing %d cards\n", number_of_cards(player));
+  while(current_card != NULL)
+  {
+    print_card(current_card);
+    current_card = current_card->next_card;
+  }
 }
+
 int main(void)
 {
-    int number_of_cards_each;
-    number_of_cards_each = 10; // number_of_cards_each = get_number_of_cards(maximum_number_of_cards);
+  int number_of_cards_each;
+  number_of_cards_each = 10; // number_of_cards_each = get_number_of_cards(maximum_number_of_cards);
 
-    Player* player_1 = (Player*) calloc(1, sizeof(Player));
-    Player* player_2 = (Player*) calloc(1, sizeof(Player));
+  Player* player_1 = (Player*) calloc(1, sizeof(Player));
+  Player* player_2 = (Player*) calloc(1, sizeof(Player));
 
-    printf("Player 1 has %d cards\n", number_of_cards(player_1));
-    printf("Player 2 has %d cards\n", number_of_cards(player_2));
-    
-
-    
-    
-    return 0;
+  printf("Player 1 has %d cards\n", number_of_cards(player_1));
+  printf("Player 2 has %d cards\n", number_of_cards(player_2));
+  
+  give_player_cards(player_1, number_of_cards_each);
+  print_player_cards(player_1);
+  
+  
+  return 0;
 }

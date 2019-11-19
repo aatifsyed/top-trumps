@@ -62,6 +62,10 @@ typedef struct player
   // is it a bad idea to refer to player 1 as *(pointer_to_players + 0)? I'd love to do player1.top_card etc, but to dynamically allocate players, this is the only way I can think of.
 } Player;
 
+// compiler was angry so I'm trying prototypes:
+int move_cards(int winning_player_index, int losing_player_index, Player* pointer_to_list_of_players);
+int other_player(int current_player);
+
 Player *make_players(int number_of_players)
 {
   Player *pointer_to_block_of_players;
@@ -134,9 +138,29 @@ int play_a_round(int current_player, Player* pointer_to_list_of_players) // retu
 {
   int current_player_best_property_index;
   current_player_best_property_index = best_card_property_index(current_player, pointer_to_list_of_players);
+  int current_player_property = (*(*(pointer_to_list_of_players + current_player)).top_card).properties[current_player_best_property_index];
+  int other_player_property = (*(*(pointer_to_list_of_players + other_player(current_player))).top_card).properties[current_player_best_property_index];
 
+  int endofgame, winning_player;
+  if (other_player_property < current_player_property) // phrased like this so other player will win a draw
+  {
+    endofgame = move_cards(current_player, other_player(current_player), pointer_to_list_of_players);
+    winning_player = current_player;
+  }
+  else
+  {
+    endofgame = move_cards(other_player(current_player), current_player, pointer_to_list_of_players);
+    winning_player = other_player(current_player);
+  }
   
-
+  if (endofgame == 1)
+  {
+    return -1;
+  }
+  else 
+  {
+    return winning_player;
+  }
   ;
 }
 
@@ -156,9 +180,9 @@ int other_player(int current_player) // returns index of not current player
   }
 }
 
-int move_cards(int winning_player_index, int losing_player_index, Player* pointer_to_list_of_players)
+int move_cards(int winning_player_index, int losing_player_index, Player* pointer_to_list_of_players) // returns 1 if losing player has no more cards
 {
-
+  printf("moving cards\n");
   Player* winning_player = pointer_to_list_of_players + winning_player_index; // for consistency, I should have named this pointer_to_winning_player...
   Player* losing_player = pointer_to_list_of_players + losing_player_index;
 
@@ -174,6 +198,15 @@ int move_cards(int winning_player_index, int losing_player_index, Player* pointe
   (*winning_player).bottom_card = (*(*(*winning_player).bottom_card).next_card).next_card;
   // winning player's new bottom card points to null
   (*(*winning_player).bottom_card).next_card = NULL;
+
+  if ((*losing_player).top_card == NULL) 
+  {
+    return 1; 
+  }
+  else
+  {
+    return 0;
+  }
 
 //   // this code is too hard to read...
 //   // winning player
@@ -225,12 +258,23 @@ int main(void)
   int current_player = rand() % number_of_players; // flip a coin to see who starts
   printf("Player %d will start\n",current_player);
 
-  change_card_pointers(pointer_to_block_of_cards,NULL);
-  print_cards(pointer_to_block_of_cards, number_of_cards_each*number_of_players);
+  // change_card_pointers(pointer_to_block_of_cards,NULL);
+  // print_cards(pointer_to_block_of_cards, number_of_cards_each*number_of_players);
 
-
+  // for(int number_of_movements = 0; number_of_movements < 9; number_of_movements++)
+  // {
+  //   move_cards(0,1,pointer_to_list_of_players);
+  //   print_cards(pointer_to_block_of_cards, number_of_cards_each * number_of_players);
+  //   print_players(pointer_to_list_of_players, number_of_players);
+  // }
 
   // play_a_round();
+
+  int endofgame;
+  while (current_player != -1)
+  {
+    current_player = play_a_round(current_player, pointer_to_list_of_players);
+  }
 
   return 0;
 }

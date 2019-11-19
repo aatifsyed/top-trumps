@@ -2,6 +2,7 @@
 #define PROTOTYPES_H
 #include "structures.h"
 
+int player_number(Player* player);
 Card* make_card(void);
 void randomise_card(Card* card);
 void print_card(Card* card);

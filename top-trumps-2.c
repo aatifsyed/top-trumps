@@ -7,6 +7,18 @@
 Player* player_1;
 Player* player_2;
 
+int player_number(Player* player)
+{
+  if (player == player_1)
+  {
+    return 1;
+  }
+  else
+  {
+    return 2;
+  }
+}
+
 Card* make_card(void)
 {
   Card* card = (Card*) calloc(1, sizeof(Card));
@@ -120,7 +132,7 @@ void print_player_cards(Player* player)
 {
   Card* current_card = player->top_card;
 
-  printf("Printing %d cards\n", number_of_cards(player));
+  printf("Printing Player %d's %d cards\n", player_number(player), number_of_cards(player));
   while(current_card != NULL)
   {
     print_card(current_card);
@@ -175,7 +187,13 @@ int main(void)
   player_1 = (Player*) calloc(1, sizeof(Player));
   player_2 = (Player*) calloc(1, sizeof(Player));
   
-  
+  give_player_cards(player_1, number_of_cards_each);
+  give_player_cards(player_2, number_of_cards_each);
+
+  print_player_cards(player_1);
+  print_player_cards(player_2);
+
+
 
   return 0;
 }

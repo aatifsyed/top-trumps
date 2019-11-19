@@ -4,6 +4,9 @@
 #include "prototypes.h" // prototypes
 #include "structures.h" // this should be blocked by the include guard anyway
 
+Player* player_1;
+Player* player_2;
+
 Card* make_card(void)
 {
   Card* card = (Card*) calloc(1, sizeof(Card));
@@ -133,26 +136,25 @@ void exchange_cards(Player* winner, Player* loser)
   send_to_bottom(winner, losers_card);
 }
 
+Player* play_round(Player* first_player, Player* second_player) // returns winning player
+{
+
+}
+
+Player* other_player(Player* player)
+{
+
+}
+
 int main(void)
 {
   int number_of_cards_each;
   number_of_cards_each = 10; // number_of_cards_each = get_number_of_cards(maximum_number_of_cards);
 
-  Player* player_1 = (Player*) calloc(1, sizeof(Player));
-  Player* player_2 = (Player*) calloc(1, sizeof(Player));
-
-  printf("Player 1 has %d cards\n", number_of_cards(player_1));
-  printf("Player 2 has %d cards\n", number_of_cards(player_2));
+  player_1 = (Player*) calloc(1, sizeof(Player));
+  player_2 = (Player*) calloc(1, sizeof(Player));
   
-  give_player_cards(player_1, number_of_cards_each);
-  print_player_cards(player_1);
-
-  give_player_cards(player_2, number_of_cards_each);
-  print_player_cards(player_2);
-
-  exchange_cards(player_1, player_2);
-  print_player_cards(player_1);
-  print_player_cards(player_2);
   
+
   return 0;
 }

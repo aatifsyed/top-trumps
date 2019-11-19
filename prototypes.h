@@ -14,5 +14,7 @@ int best_property_index(Player* player);
 void give_player_cards(Player* player, int number_to_give);
 void print_player_cards(Player* player);
 void exchange_cards(Player* winner, Player* loser);
+Player* play_round(Player* first_player, Player* second_player);
+Player* other_player(Player* player);
 
 #endif

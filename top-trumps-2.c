@@ -150,7 +150,9 @@ int main(void)
   give_player_cards(player_2, number_of_cards_each);
   print_player_cards(player_2);
 
-  
+  exchange_cards(player_1, player_2);
+  print_player_cards(player_1);
+  print_player_cards(player_2);
   
   return 0;
 }

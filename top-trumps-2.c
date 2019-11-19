@@ -182,7 +182,7 @@ Player* other_player(Player* player)
 int main(void)
 {
   srand(time(NULL));
-  
+
   int number_of_cards_each;
   number_of_cards_each = 10; // number_of_cards_each = get_number_of_cards(maximum_number_of_cards);
 
@@ -191,9 +191,6 @@ int main(void)
   
   give_player_cards(player_1, number_of_cards_each);
   give_player_cards(player_2, number_of_cards_each);
-
-  print_player_cards(player_1);
-  print_player_cards(player_2);
 
   Player* first_player = player_1;
   Player* second_player = player_2;

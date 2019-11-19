@@ -2,6 +2,7 @@
 #include <stdlib.h>  // for random numbers
 #include <time.h> // for seeding RNG
 #include "prototypes.h" // prototypes
+#include "structures.h" // this should be blocked by the include guard anyway
 
 Card* make_card(void)
 {
@@ -15,6 +16,13 @@ void randomise_card(Card* card)
   {
     card->properties[current_property] = rand() % 9999;
   }
+}
+
+void print_card(Card* card)
+{
+  printf("Card at %p: next_card %p, %4d, %4d, %4d, %d4\n", 
+  card, card->next_card, 
+  card->properties[0], card->properties[1], card->properties[2], card->properties[3]);
 }
 
 void send_to_top(Player* player, Card* card)
@@ -67,6 +75,12 @@ int number_of_cards(Player* player)
   }
 
   return number_of_cards;
+}
+
+int best_property_index(Player* player)
+{
+  int best_property_index;
+  int best_property_value = NULL;
 }
 
 int main(void)

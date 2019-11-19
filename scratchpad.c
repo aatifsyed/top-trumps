@@ -2,14 +2,45 @@
 #include <stdlib.h>
 #include <time.h> // for seeding RNG
 
-int main()
+typedef struct card
 {
+    int properties[4];
+    struct card *next_card;
+} Card;
+
+Card *make_card(void)
+{
+    return (Card *)calloc(1, sizeof(Card));
+}
+
+void randomise_card(Card *card)
+{
+    int current_property;
+    for (current_property = 0; current_property < 4; current_property++)
+    {
+        card->properties[current_property] = rand() % 9999;
+    }
+}
+
+void print_card(Card* card)
+{
+  printf("Card at %p: next_card %p, %d, %d, %d, %d\n", card, card->next_card, card->properties[0], card->properties[1], card->properties[2], card->properties[3]);
+}
+
+int main()
+{   
     srand(time(NULL));
+    
+    Card* card = make_card();
+    randomise_card(card);
+    print_card(card);
+    
+    
 
     // for (int i = 0; i < 10; i++)
     // {
     //     printf("%d\n", ((int)rand()) % 255);
-    // }  
+    // }
     // return 0;
 
     // int empty;
@@ -22,5 +53,10 @@ int main()
     //     printf("your life is slightly easier");
     // }
 
-    printf("%d\n",rand() % 2);
+    // printf("%d\n",rand() % 2);
+
+    // if (NULL == 0)
+    // {
+    //     printf("NULL=0\n");
+    // }
 }

@@ -79,8 +79,22 @@ int number_of_cards(Player* player)
 
 int best_property_index(Player* player)
 {
+  Card* card = player->top_card;
+
   int best_property_index;
-  int best_property_value = NULL;
+  int current_property_index;
+  int best_property_value = 0;
+
+  for(current_property_index = 0; current_property_index < 4; current_property_index++)
+  {
+    if (card->properties[current_property_index] > best_property_value)
+    {
+      best_property_index = current_property_index;
+      best_property_value = card->properties[current_property_index];
+    }
+  }
+
+  return best_property_index;
 }
 
 int main(void)

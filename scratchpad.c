@@ -27,13 +27,32 @@ void print_card(Card* card)
   printf("Card at %p: next_card %p, %d, %d, %d, %d\n", card, card->next_card, card->properties[0], card->properties[1], card->properties[2], card->properties[3]);
 }
 
+int best_property_index(Card* card)
+{
+  int best_property_index;
+  int current_property_index;
+  int best_property_value = 0;
+
+  for(current_property_index = 0; current_property_index < 4; current_property_index++)
+  {
+    if (card->properties[current_property_index] > best_property_value)
+    {
+      best_property_index = current_property_index;
+      best_property_value = card->properties[current_property_index];
+    }
+  }
+
+  return best_property_index;
+}
+
 int main()
 {   
     srand(time(NULL));
-    
+
     Card* card = make_card();
     randomise_card(card);
     print_card(card);
+    printf("best property at index %d\n", best_property_index(card));
     
     
 

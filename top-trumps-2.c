@@ -1,18 +1,7 @@
 #include <stdio.h> // for IO
 #include <stdlib.h>  // for random numbers
 #include <time.h> // for seeding RNG
-
-typedef struct player
-{
-  int wins;
-  Card* top_card;
-} Player;
-
-typedef struct card
-{
-  int properties[4];
-  struct card* next_card;
-} Card;
+#include "prototypes.h" // prototypes
 
 Card* make_card(void)
 {
@@ -21,15 +10,24 @@ Card* make_card(void)
 
 void randomise_card(Card* card)
 {
-  for(int current_property = 0; current_property <4; current_property++)
+  int current_property;
+  for(current_property = 0; current_property <4; current_property++)
   {
     card->properties[current_property] = rand() % 9999;
   }
 }
 
-int send_to_top(Player* player, Card* card)
+void send_to_top(Player* player, Card* card)
 {
+  Card* previous_top_card = player->top_card;
   player->top_card = card;
+  player->top_card->next_card = previous_top_card;
+}
+
+void send_to_bottom(Player* player, Card* card)
+{
+  bottom_card(player)->next_card = card;
+  card->next_card = NULL;
 }
 
 Card* bottom_card(Player* player)
@@ -42,6 +40,14 @@ Card* bottom_card(Player* player)
   }
 
   return current_card;
+}
+
+Card* pop_card_from_top(Player* player)
+{
+  Card* popped_top_card = player->top_card;
+  player->top_card = player->top_card->next_card;
+  popped_top_card->next_card = NULL;
+  return popped_top_card;
 }
 
 int number_of_cards(Player* player)
@@ -70,6 +76,10 @@ int main(void)
 
     Player* player_1 = (Player*) calloc(1, sizeof(Player));
     Player* player_2 = (Player*) calloc(1, sizeof(Player));
+
+    printf("Player 1 has %d cards\n", number_of_cards(player_1));
+    printf("Player 2 has %d cards\n", number_of_cards(player_2));
+    
 
     
     

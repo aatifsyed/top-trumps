@@ -179,12 +179,56 @@ Player* other_player(Player* player)
   }
 }
 
+void clean_cards(Player* player)
+{
+  if(player->top_card == NULL)
+  {
+    return;
+  }
+
+  Card* current_card = player->top_card;
+  Card* card_to_clean;
+
+  while(current_card->next_card != NULL)
+  {
+    card_to_clean = current_card;
+    current_card = current_card->next_card;
+    free(card_to_clean);
+  }
+
+  free(current_card);
+  return;
+}
+
+void clean_players(void)
+{
+  free(player_1);
+  free(player_2);
+}
+
+int get_number_of_cards(void)
+{
+  int number_of_cards_each = 0;
+  printf("Enter number of cards: ");
+  scanf("%d", &number_of_cards_each);
+  printf("");
+  return number_of_cards_each;
+}
+
+void press_to_exit(void)
+{
+  int nothing;
+  printf("^D to exit");
+  scanf("%d", &nothing);
+  printf("\n");
+}
+
 int main(void)
 {
   srand(time(NULL));
 
-  int number_of_cards_each;
-  number_of_cards_each = 10; // number_of_cards_each = get_number_of_cards(maximum_number_of_cards);
+  int number_of_cards_each = 10;
+  number_of_cards_each = get_number_of_cards();
 
   player_1 = (Player*) calloc(1, sizeof(Player));
   player_2 = (Player*) calloc(1, sizeof(Player));
@@ -201,7 +245,14 @@ int main(void)
     second_player = other_player(first_player);
   }
 
-  printf("Player %d lost\n",player_number(second_player));
+  printf("Player %d won, with %d wins\n",player_number(first_player), first_player->wins);
+  printf("Player %d lost, but had %d wins\n",player_number(second_player), second_player->wins);
+
+  press_to_exit();
+
+  clean_cards(player_1);
+  clean_cards(player_2);
+  clean_players();
 
   return 0;
 }

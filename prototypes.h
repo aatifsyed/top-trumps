@@ -17,5 +17,9 @@ void print_player_cards(Player* player);
 void exchange_cards(Player* winner, Player* loser);
 Player* play_round(Player* first_player, Player* second_player);
 Player* other_player(Player* player);
+void clean_cards(Player* player);
+void clean_players(void);
+int get_number_of_cards(void);
+void press_to_exit(void);
 
 #endif

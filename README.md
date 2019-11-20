@@ -11,4 +11,4 @@ And use git...
 ## to-do
 - Comment the code where appropriate
 - Add a "verbose" flag
-- input sanitisation
+- Input sanitisation

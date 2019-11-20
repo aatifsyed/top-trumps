@@ -1,8 +1,8 @@
 #include <stdio.h> // for IO
 #include <stdlib.h>  // for random numbers
 #include <time.h> // for seeding RNG
-#include "prototypes.h" 
-#include "structures.h" 
+#include "prototypes.h"
+#include "structures.h"
 #include "functions.h"
 
 Player* player_1;
@@ -17,7 +17,7 @@ int main(void)
 
   player_1 = (Player*) calloc(1, sizeof(Player));
   player_2 = (Player*) calloc(1, sizeof(Player));
-  
+
   give_player_cards(player_1, number_of_cards_each);
   give_player_cards(player_2, number_of_cards_each);
 

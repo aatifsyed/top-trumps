@@ -4,7 +4,7 @@
 #include "structures.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h> 
+#include <time.h>
 
 extern Player* player_1;
 extern Player* player_2;
@@ -44,9 +44,9 @@ void print_card(Card* card)
     printf("Null pointer passed to print_card\n");
     return;
   }
-  
-  printf("Card at %9p: next_card %9p, %4d, %4d, %4d, %4d\n", 
-  card, card->next_card, 
+
+  printf("Card at %9p: next_card %9p, %4d, %4d, %4d, %4d\n",
+  card, card->next_card,
   card->properties[0], card->properties[1], card->properties[2], card->properties[3]);
 }
 
@@ -66,7 +66,7 @@ void send_to_bottom(Player* player, Card* card)
 Card* bottom_card(Player* player)
 {
   Card* current_card = player->top_card;
-  
+
   while(current_card->next_card != NULL)
   {
     current_card = current_card->next_card;
@@ -166,7 +166,7 @@ Player* play_round(Player* first_player, Player* second_player) // returns winni
 
   exchange_cards(winning_player,other_player(winning_player));
   (winning_player->wins)++;
-  return winning_player;  
+  return winning_player;
 }
 
 Player* other_player(Player* player)
